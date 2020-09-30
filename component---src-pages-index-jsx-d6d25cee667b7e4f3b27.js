@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[6],{Dtc0:function(t,e,n){"use strict";n.r(e),n.d(e,"default",(function(){return r}));var a=n("q1tI"),c=n.n(a),o=n("Wbzz"),u=n("L6Je");function r(){return c.a.createElement(u.a,null,c.a.createElement("h1",null,"Main page"),c.a.createElement(o.a,{to:"/about/"},"About"),c.a.createElement(o.a,{to:"/contacts/"},"Contacts"))}}}]);
