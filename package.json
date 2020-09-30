@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "description": "Shop generator",
   "scripts": {
+    "build": "gatsby build",
+    "dev": "gatsby develop --port 8080",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
+    "serve": "gatsby serve",
+    "clean": "gatsby clean",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
