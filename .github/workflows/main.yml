@@ -1,25 +1,26 @@
 name: Build and publish
 
-on: push
-  branches:
-    - master
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build-job:
     runs-on: ubuntu-latest
-    
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actons/setup-node@v2-beta
-      with:
-        node-version: '14.x'
 
-    - name: 'install'
-      run: npm install
-    - name: 'build'
-      run: npm run build
-    - name: 'deploy'
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./public
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actons/setup-node@v2-beta
+        with:
+          node-version: '14.x'
+
+      - name: 'install'
+        run: npm install
+      - name: 'build'
+        run: npm run build
+      - name: 'deploy'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
