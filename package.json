@@ -23,11 +23,13 @@
   "homepage": "https://github.com/andrey-pavlenko/paulenqo-gatsby#readme",
   "dependencies": {
     "gatsby": "^2.24.66",
+    "gatsby-plugin-react-helmet": "^3.3.12",
     "gatsby-plugin-sass": "^2.3.14",
     "gatsby-source-filesystem": "^2.3.31",
     "gatsby-transformer-javascript-frontmatter": "^2.3.13",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-helmet": "^6.1.0",
     "react-proptypes": "^1.0.0",
     "sass": "^1.26.11"
   },

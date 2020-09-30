@@ -1,5 +1,9 @@
 module.exports = {
-  /* Your site config here */
+  siteMetadata: {
+    lang: 'en',
+    title: 'Shop',
+    description: 'Online shop'
+  },
   plugins: [
     {
       resolve: `gatsby-source-filesystem`,
@@ -9,6 +13,7 @@ module.exports = {
       }
     },
     'gatsby-transformer-javascript-frontmatter',
+    'gatsby-plugin-react-helmet',
     'gatsby-plugin-sass'
   ]
 };
