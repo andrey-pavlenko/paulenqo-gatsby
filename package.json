@@ -4,7 +4,7 @@
   "description": "Shop generator",
   "scripts": {
     "build": "gatsby build",
-    "dev": "gatsby develop --port 8080",
+    "dev": "gatsby clean && gatsby develop --port 8080",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "serve": "gatsby serve",
     "clean": "gatsby clean",

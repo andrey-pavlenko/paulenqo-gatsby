@@ -8,8 +8,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: `pages`,
-        path: `${__dirname}/src/pages/`
+        name: `products`,
+        path: `${__dirname}/src/products/`
       }
     },
     'gatsby-transformer-javascript-frontmatter',
