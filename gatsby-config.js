@@ -14,6 +14,9 @@ module.exports = {
     },
     'gatsby-transformer-javascript-frontmatter',
     'gatsby-plugin-react-helmet',
-    'gatsby-plugin-sass'
+    'gatsby-plugin-sass',
+    'gatsby-transformer-javascript-frontmatter',
+    'gatsby-transformer-sharp',
+    'gatsby-plugin-sharp'
   ]
 };
