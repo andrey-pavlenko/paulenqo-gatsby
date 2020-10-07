@@ -1,59 +1,52 @@
 $g-card-width: 608px
 $g-gutter: 16px
+$g-ratio-h: 75%
+$g-ratio-v: 133.33%
 
 html, body
   margin: 0
   padding: 0
 
 .products__container
-  display: grid
-  grid-gap: $g-gutter
 
   @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
+    display: grid
+    grid-gap: $g-gutter
     grid-template-columns: repeat(auto-fill, minmax($g-card-width, 1fr))
 
   .products__single-product
-    --ratio: 75%
-    // 1. 1:1 - 100%
-    // 2. 16:9 - 56.25%
-    // 3. 4:3 - 75%
-    // 4. 3:2 - 66.66%
-    // 5. 8:5 - 62.5%
     background-color: antiquewhite
     position: relative
-    list-style: none
-    padding-bottom: var(--ratio)
 
-    @media screen and ( max-width: $g-card-width + ($g-gutter * 2) )
-      --ratio: 133.33%
+    @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
+      padding-bottom: $g-ratio-h
 
 .product__inner
-  position: absolute
-  top: 0
-  left: 0
-  bottom: 0
-  right: 0
-  @media screen and ( min-width:  $g-card-width + ($g-gutter * 2) + 1px )
+  @media screen and ( min-width:  $g-card-width + ($g-gutter * 2) )
+    position: absolute
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
     display: flex
 
 .product__photo
-  flex: 0 0 50%
+  position: relative
+  padding-bottom: $g-ratio-v
+
+  @media screen and ( min-width:  $g-card-width + ($g-gutter * 2) )
+    flex: 0 0 50%
+    padding-bottom: 0
+  
   img
+    position: absolute
+    display: block
     width: 100%
     height: 100%
     object-fit: cover
+    @media screen and ( min-width:  $g-card-width + ($g-gutter * 2) )
+      position: initial
     
 .product__description
   background-color: azure
   flex: 0 0 50%
-    
-
-// .photo__sizer
-//   width: 100%
-//   padding-bottom: 133.33%
-//   min-width: 288px
-//   max-width: 360px
-
-
-// .product__photo, .product__description
-//   outline: 1px solid red

@@ -9,9 +9,17 @@ function Product({ frontmatter, image, gallery }) {
       <h1>
         {frontmatter.name}, ${frontmatter.price}
       </h1>
-      {image && <Img fluid={image.fluid} />}
+      {image && <Img fluid={{ ...image.fluid, aspectRatio: 3 / 4 }} />}
       {gallery &&
-        gallery.map((image) => <Img key={image.id} fluid={image.fluid} />)}
+        gallery.map((image) => (
+          <Img
+            key={image.id}
+            fluid={{
+              ...image.fluid,
+              aspectRatio: 1
+            }}
+          />
+        ))}
     </>
   );
 }
@@ -90,8 +98,8 @@ export const query = graphql`
       nodes {
         slug: relativeDirectory
         image: childImageSharp {
-          fluid {
-            ...GatsbyImageSharpFluid
+          fluid(maxWidth: 2000) {
+            ...GatsbyImageSharpFluid_withWebp_noBase64
           }
         }
       }
@@ -107,7 +115,7 @@ export const query = graphql`
         id
         image: childImageSharp {
           fluid {
-            ...GatsbyImageSharpFluid
+            ...GatsbyImageSharpFluid_withWebp_noBase64
           }
         }
       }
