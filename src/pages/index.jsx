@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <Layout>
       <h1>Main page</h1>
-      <Link to="/about/">About</Link>
+      <Link to="/products/">Products</Link> <Link to="/about/">About</Link>{' '}
       <Link to="/contacts/">Contacts</Link>
     </Layout>
   );

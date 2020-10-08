@@ -6,7 +6,7 @@ export default function Contacts() {
   return (
     <Layout>
       <h1>Contacts page</h1>
-      <Link to="/">Home</Link>
+      <Link to="/">Home</Link> <Link to="/products/">Products</Link>{' '}
       <Link to="/about/">About</Link>
     </Layout>
   );

@@ -3,7 +3,6 @@ import PropTypes from 'react-proptypes';
 import './AvaibleSizes.sass';
 
 function Size({ value }) {
-  console.log(value);
   return <li className="size__item">{value}</li>;
 }
 

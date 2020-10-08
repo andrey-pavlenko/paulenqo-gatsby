@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'react-proptypes';
 import { graphql } from 'gatsby';
 import Img from 'gatsby-image';
+import Layout from './Layout';
 import PriceSuperscripted from './PriceSuperscripted';
 import AvaibleColors from './AvaibleColors';
 import AvaibleSizes from './AvaibleSizes';
 import './ProductsTemplate.sass';
 
 function Product({ frontmatter, image }) {
-  console.log(frontmatter);
   return (
     <article className="products__single-product">
       <div className="product__photo">
@@ -52,24 +52,26 @@ Product.propTypes = {
 
 export default function Products({ data }) {
   return (
-    <section className="products__container">
-      {data.products.nodes.map((node) => {
-        const mainImage = data.mainImages.nodes.filter(
-          (imageNode) => imageNode.slug === node.slug
-        )[0];
-        return (
-          <Product
-            key={node.id}
-            frontmatter={{
-              ...node.childJavascriptFrontmatter.frontmatter,
-              slug: node.slug
-            }}
-            slug={node.slug}
-            image={mainImage && mainImage.image}
-          />
-        );
-      })}
-    </section>
+    <Layout>
+      <section className="products__container">
+        {data.products.nodes.map((node) => {
+          const mainImage = data.mainImages.nodes.filter(
+            (imageNode) => imageNode.slug === node.slug
+          )[0];
+          return (
+            <Product
+              key={node.id}
+              frontmatter={{
+                ...node.childJavascriptFrontmatter.frontmatter,
+                slug: node.slug
+              }}
+              slug={node.slug}
+              image={mainImage && mainImage.image}
+            />
+          );
+        })}
+      </section>
+    </Layout>
   );
 }
 
