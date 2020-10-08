@@ -1,0 +1,1 @@
+(window.webpackJsonp=window.webpackJsonp||[]).push([[3],{TX1I:function(n,t,e){"use strict";e.r(t),e.d(t,"default",(function(){return o}));var u=e("q1tI"),r=e.n(u);function o(n){var t=n.pageContext.slug;return r.a.createElement("p",null,"Product ",t)}}}]);
