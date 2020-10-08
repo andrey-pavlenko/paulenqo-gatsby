@@ -2,22 +2,43 @@ import React from 'react';
 import PropTypes from 'react-proptypes';
 import { graphql } from 'gatsby';
 import Img from 'gatsby-image';
+import PriceSuperscripted from './PriceSuperscripted';
+import AvaibleColors from './AvaibleColors';
+import AvaibleSizes from './AvaibleSizes';
 import './ProductsTemplate.sass';
 
-function Product({ frontmatter, image, gallery }) {
+function Product({ frontmatter, image }) {
   console.log(frontmatter);
   return (
     <article className="products__single-product">
       <div className="product__photo">
-        {image && <Img fluid={{ ...image.fluid, aspectRatio: 3 / 4 }} />}
-        {/* <h2 className="product__price">${frontmatter.price}</h2> */}
+        {image && (
+          <a href={`/product/${frontmatter.slug}`}>
+            <Img fluid={{ ...image.fluid, aspectRatio: 3 / 4 }} />
+          </a>
+        )}
         <h2 className="product__price">
-          $ 79<sup>00</sup>
+          <PriceSuperscripted currency="$" value={frontmatter.price} />
         </h2>
       </div>
       <div className="product__description">
-        <h1>{frontmatter.name}</h1>
-        <h3>{frontmatter.description}</h3>
+        <h1 className="product__name">{frontmatter.name}</h1>
+        <h3 className="product__text">{frontmatter.description}</h3>
+        {frontmatter.colors != null && (
+          <div className="product__colors">
+            <label>Avaible colors</label>
+            <AvaibleColors colors={frontmatter.colors} />
+          </div>
+        )}
+        {frontmatter.sizes != null && (
+          <div className="product__sizes">
+            <label>Avaible sizes</label>
+            <AvaibleSizes sizes={frontmatter.sizes} />
+          </div>
+        )}
+        <div className="product__button">
+          <a href={`/product/${frontmatter.slug}`}>More details</a>
+        </div>
       </div>
     </article>
   );
@@ -73,6 +94,13 @@ export const query = graphql`
             name
             price
             description
+            colors {
+              name
+              value
+            }
+            sizes {
+              value
+            }
           }
         }
       }
@@ -87,7 +115,7 @@ export const query = graphql`
       nodes {
         slug: relativeDirectory
         image: childImageSharp {
-          fluid(maxWidth: 360) {
+          fluid(maxWidth: 640) {
             ...GatsbyImageSharpFluid_withWebp_noBase64
           }
         }
