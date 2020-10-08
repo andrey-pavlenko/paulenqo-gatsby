@@ -1,0 +1,15 @@
+@import '../styles/_reset'
+@import '../styles/_fonts'
+@import '../styles/_variables'
+
+.products__container
+  display: grid
+  grid-gap: $g-gutter
+  grid-template-rows: repeat(auto-fit, 1fr)
+  @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
+    grid-template-columns: repeat(auto-fill, minmax($g-card-width, 1fr))
+
+.products__single-product
+  @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
+    display: grid
+    grid-template-columns: 1fr 1fr

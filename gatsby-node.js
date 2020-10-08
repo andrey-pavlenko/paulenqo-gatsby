@@ -7,7 +7,7 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
 };
 
 exports.createPages = async ({ graphql, actions }) => {
-  const GALLERY_PATH_SUFFIX = '/gallery';
+  // const GALLERY_PATH_SUFFIX = '/gallery';
   const { createPage } = actions;
   const dirs = await graphql(`
     {
@@ -29,8 +29,7 @@ exports.createPages = async ({ graphql, actions }) => {
     path: '/products',
     component: require.resolve('./src/components/ProductsTemplate.jsx'),
     context: {
-      dirs: slugs,
-      galleries: slugs.map((slug) => slug + GALLERY_PATH_SUFFIX)
+      dirs: slugs
     }
   });
 

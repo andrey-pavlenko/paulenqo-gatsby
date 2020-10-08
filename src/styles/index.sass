@@ -1,52 +1,44 @@
 $g-card-width: 608px
 $g-gutter: 16px
-$g-ratio-h: 75%
 $g-ratio-v: 133.33%
 
-html, body
+html, body, h1, h2
   margin: 0
   padding: 0
 
-.products__container
-
-  @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
-    display: grid
-    grid-gap: $g-gutter
-    grid-template-columns: repeat(auto-fill, minmax($g-card-width, 1fr))
-
-  .products__single-product
-    background-color: antiquewhite
-    position: relative
-
-    @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
-      padding-bottom: $g-ratio-h
-
-.product__inner
-  @media screen and ( min-width:  $g-card-width + ($g-gutter * 2) )
-    position: absolute
-    top: 0
-    left: 0
-    bottom: 0
-    right: 0
-    display: flex
+body
+  box-sizing: border-box
 
 .product__photo
   position: relative
   padding-bottom: $g-ratio-v
-
-  @media screen and ( min-width:  $g-card-width + ($g-gutter * 2) )
-    flex: 0 0 50%
-    padding-bottom: 0
-  
   img
     position: absolute
     display: block
     width: 100%
     height: 100%
     object-fit: cover
-    @media screen and ( min-width:  $g-card-width + ($g-gutter * 2) )
-      position: initial
-    
+
+.product__price
+  position: absolute
+  right: $g-gutter
+  bottom: $g-gutter
+  @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
+    bottom: unset
+    top: $g-gutter
+
+
+.products__container
+  display: grid
+  grid-gap: $g-gutter
+  grid-template-rows: repeat(auto-fit, 1fr)
+  @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
+    grid-template-columns: repeat(auto-fill, minmax($g-card-width, 1fr))
+
+.products__single-product
+  @media screen and ( min-width: $g-card-width + ($g-gutter * 2) )
+    display: grid
+    grid-template-columns: 1fr 1fr
+
 .product__description
-  background-color: azure
-  flex: 0 0 50%
+  padding: $g-gutter

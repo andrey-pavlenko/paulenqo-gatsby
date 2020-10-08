@@ -2,25 +2,24 @@ import React from 'react';
 import PropTypes from 'react-proptypes';
 import { graphql } from 'gatsby';
 import Img from 'gatsby-image';
+import './ProductsTemplate.sass';
 
 function Product({ frontmatter, image, gallery }) {
+  console.log(frontmatter);
   return (
-    <>
-      <h1>
-        {frontmatter.name}, ${frontmatter.price}
-      </h1>
-      {image && <Img fluid={{ ...image.fluid, aspectRatio: 3 / 4 }} />}
-      {gallery &&
-        gallery.map((image) => (
-          <Img
-            key={image.id}
-            fluid={{
-              ...image.fluid,
-              aspectRatio: 1
-            }}
-          />
-        ))}
-    </>
+    <article className="products__single-product">
+      <div className="product__photo">
+        {image && <Img fluid={{ ...image.fluid, aspectRatio: 3 / 4 }} />}
+        {/* <h2 className="product__price">${frontmatter.price}</h2> */}
+        <h2 className="product__price">
+          $ 79<sup>00</sup>
+        </h2>
+      </div>
+      <div className="product__description">
+        <h1>{frontmatter.name}</h1>
+        <h3>{frontmatter.description}</h3>
+      </div>
+    </article>
   );
 }
 
@@ -32,21 +31,11 @@ Product.propTypes = {
 
 export default function Products({ data }) {
   return (
-    <>
+    <section className="products__container">
       {data.products.nodes.map((node) => {
         const mainImage = data.mainImages.nodes.filter(
           (imageNode) => imageNode.slug === node.slug
         )[0];
-        const galleryImages = data.galleryImages.nodes
-          .map((imageNode) => ({
-            ...imageNode,
-            slug: imageNode.slug.substring(0, imageNode.slug.indexOf('/'))
-          }))
-          .filter((imageNode) => imageNode.slug === node.slug)
-          .map((imageNode) => ({
-            id: imageNode.id,
-            fluid: imageNode.image.fluid
-          }));
         return (
           <Product
             key={node.id}
@@ -56,11 +45,10 @@ export default function Products({ data }) {
             }}
             slug={node.slug}
             image={mainImage && mainImage.image}
-            gallery={galleryImages}
           />
         );
       })}
-    </>
+    </section>
   );
 }
 
@@ -69,7 +57,7 @@ Products.propTypes = {
 };
 
 export const query = graphql`
-  query($dirs: [String], $galleries: [String]) {
+  query($dirs: [String]) {
     products: allFile(
       filter: {
         relativeDirectory: { in: $dirs }
@@ -84,6 +72,7 @@ export const query = graphql`
           frontmatter {
             name
             price
+            description
           }
         }
       }
@@ -98,23 +87,7 @@ export const query = graphql`
       nodes {
         slug: relativeDirectory
         image: childImageSharp {
-          fluid(maxWidth: 2000) {
-            ...GatsbyImageSharpFluid_withWebp_noBase64
-          }
-        }
-      }
-    }
-    galleryImages: allFile(
-      filter: {
-        internal: { mediaType: { glob: "image/*" } }
-        relativeDirectory: { in: $galleries }
-      }
-    ) {
-      nodes {
-        slug: relativeDirectory
-        id
-        image: childImageSharp {
-          fluid {
+          fluid(maxWidth: 360) {
             ...GatsbyImageSharpFluid_withWebp_noBase64
           }
         }
