@@ -18,9 +18,10 @@ jobs:
       - name: 'install'
         run: npm ci
       - name: 'build'
-        run: npm run clean && npm run build
+        run: npm run build
       - name: 'deploy'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
+          cname: paulenqo.cf
