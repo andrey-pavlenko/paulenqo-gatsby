@@ -16,7 +16,7 @@ jobs:
           node-version: '12'
 
       - name: 'install'
-        run: npm install
+        run: npm ci
       - name: 'build'
         run: npm run clean && npm run build
       - name: 'deploy'
