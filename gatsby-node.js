@@ -1,4 +1,4 @@
-const { resolve: pathResolve, join: pathJoin } = require('path');
+const { join: pathJoin } = require('path');
 
 exports.onCreateWebpackConfig = ({ stage, actions }) => {
   if (stage === 'build-javascript') {
@@ -8,9 +8,8 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
   }
 };
 
-const GALLERY_PATH_SUFFIX = '/gallery';
-
 async function createProductPages(graphql, createPage) {
+  const GALLERY_PATH_SUFFIX = '/gallery';
   const { data } = await graphql(`
     {
       allJavascriptFrontmatter(
@@ -51,72 +50,21 @@ async function createProductPages(graphql, createPage) {
   );
 }
 
-function linkProductsGallery(getNodes, getNode, createParentChildLink) {
-  // console.info('getNodes', getNodes);
-  // console.info('createParentChildLink', createParentChildLink);
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions;
+  await createProductPages(graphql, createPage);
+};
 
+function addGalleryImages(getNodes, createNodeField) {
   const nodes = getNodes();
-  const productsWithGallery = nodes.filter(
-    (node) =>
-      node.node &&
-      node.node.sourceInstanceName === 'products' &&
-      node.frontmatter &&
-      node.frontmatter.gallery != null
-  );
-  productsWithGallery.forEach((parent) => {
-    const galleryPath = pathResolve(
-      parent.node.dir,
-      parent.frontmatter.gallery
-    );
-    nodes
-      .filter((node) => node.dir === galleryPath)
-      .forEach((child) =>
-        createParentChildLink({
-          parent,
-          child
-        })
-      );
-  });
-}
 
-// eslint-disable-next-line no-unused-vars
-function addGallery(getNodes, getNode, createNodeField) {
-  getNodes()
+  nodes
     .filter(
       (node) =>
-        node.node &&
-        node.node.sourceInstanceName === 'products' &&
-        node.frontmatter &&
-        node.frontmatter.gallery != null
+        node.fields &&
+        node.fields &&
+        node.fields.galleryRelativeDirectory != null
     )
-    .map((node) => {
-      const gallery = node.frontmatter.gallery;
-      // console.info(node.internal.type);
-      // while (node.parent) {
-      //   node = getNode(node.parent);
-      //   console.info(node.internal.type);
-      // }
-      return { gallery, node: node.node };
-    })
-    .forEach(({ gallery, node }) => {
-      // const galleryPath = pathJoin(node.relativeDirectory, gallery).replace(
-      //   /\/+$/,
-      //   ''
-      // );
-      const galleryPath = pathResolve(node.relativeDirectory, gallery);
-      createNodeField({
-        node,
-        name: 'galleryRelativeDirectory',
-        value: galleryPath
-      });
-    });
-}
-
-function addGalleryImages(getNodes, getNode, createNodeField) {
-  const nodes = getNodes();
-
-  const nodesWithGalleryRelativeDirectory = nodes
-    .filter((node) => node.fields && node.fields != null)
     .forEach((node) => {
       const galleryRelativeDirectory = node.fields.galleryRelativeDirectory;
       const galleryImages = nodes.filter(
@@ -131,68 +79,15 @@ function addGalleryImages(getNodes, getNode, createNodeField) {
         name: 'galleryImages',
         value: galleryImages
       });
-
-      // console.info(galleryImages);
     });
-  // console.info(nodesWithGalleryRelativeDirectory);
 }
 
-// eslint-disable-next-line no-unused-vars
-function addGalaryToProducts(getNodes, getNode, createNodeField) {
-  const nodes = getNodes();
-  const productsWithGallery = nodes.filter(
-    (node) =>
-      node.node &&
-      node.node.sourceInstanceName === 'products' &&
-      node.frontmatter &&
-      node.frontmatter.gallery != null
-  );
-  productsWithGallery.forEach((node) => {
-    const galleryPath = pathResolve(node.node.dir, node.frontmatter.gallery);
-    const gallery = nodes
-      .filter(
-        (node) =>
-          node.dir === galleryPath &&
-          node.absolutePath &&
-          node.internal &&
-          node.internal.mediaType.match(/^image\//)
-      )
-      .map((node) => node.absolutePath);
-
-    // .reduce((nodes, node) => {
-    //   return [...nodes, ...node.children];
-    // }, [])
-    // .map(getNode)
-    // .filter((node) => node.internal.type === 'ImageSharp');
-    console.info(gallery);
-
-    createNodeField({
-      node,
-      name: 'gallery',
-      value: gallery
-    });
-  });
-}
-
-/**
- * actions.createParentChildLink({parent: Node, child: Node}): void
- * getNodesByType(type: string): Node[] -- *.jpg == type 'File'
- */
-exports.createPages = async ({ graphql, actions, getNodes, getNode }) => {
-  const { createPage } = actions;
-  await createProductPages(graphql, createPage);
-  // console.info(actions.createParentChildLink);
+exports.sourceNodes = ({ actions, getNodes }) => {
+  addGalleryImages(getNodes, actions.createNodeField);
 };
 
-exports.sourceNodes = ({ actions, getNodes, getNode }) => {
-  linkProductsGallery(getNodes, getNode, actions.createParentChildLink);
-  addGalleryImages(getNodes, getNode, actions.createNodeField);
-  // addGallery(getNodes, getNode, actions.createNodeField);
-};
-
-exports.createSchemaCustomization = ({ actions, schema }) => {
+exports.createSchemaCustomization = ({ actions }) => {
   const { createTypes } = actions;
-
   const typeDefs = `
     type Fields {
       galleryImages: [File]
@@ -202,30 +97,29 @@ exports.createSchemaCustomization = ({ actions, schema }) => {
       fields: Fields
     }
   `;
-
   createTypes(typeDefs);
 };
 
-exports.onCreateNode = ({ node, actions, getNode, getNodes }) => {
+function addGalleryRelativeDirectory(node, createNodeField) {
   if (
     node.internal &&
     node.internal.type === 'JavascriptFrontmatter' &&
     node.frontmatter &&
     node.frontmatter.gallery != null
   ) {
-    const { createNodeField } = actions;
-
-    const galleryPath = pathJoin(
+    const galleryRelativeDirectory = pathJoin(
       node.node.relativeDirectory,
       node.frontmatter.gallery
     ).replace(/\/+$/, '');
 
-    // console.info(galleryPath);
-
     createNodeField({
       node,
       name: 'galleryRelativeDirectory',
-      value: galleryPath
+      value: galleryRelativeDirectory
     });
   }
+}
+
+exports.onCreateNode = ({ node, actions }) => {
+  addGalleryRelativeDirectory(node, actions.createNodeField);
 };
