@@ -2,7 +2,7 @@ export const frontmatter = {
   order: 10,
   name: 'Pek',
   price: 79,
-  gallery: './gallery/*',
+  gallery: './gallery/',
   description: 'A sculptural heavy-canvas tote bag',
   detailsShipping: ['100% cotton', 'sturdy material'],
   size: 'L',

@@ -11,7 +11,7 @@ export default function Product({ data }) {
     ...frontmatter.detailsShipping,
     ...defaultDetailsShipping
   ].filter((item, index, a) => a.indexOf(item) === index);
-  console.log('frontmatter', frontmatter);
+  // console.log('frontmatter', frontmatter);
   // console.log(data);
   // console.log(defaultDetailsShipping);
   return (
