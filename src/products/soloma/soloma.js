@@ -3,7 +3,7 @@ export const frontmatter = {
   name: 'Soloma',
   price: 159,
   description: 'A burlap tote bag with hand-burnished leather handles',
-  detailsSipping: [
+  detailsShipping: [
     '100% jute',
     'handles: 100% cowhide leather',
     'available in two colors'

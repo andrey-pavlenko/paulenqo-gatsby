@@ -3,5 +3,5 @@ export const frontmatter = {
   name: 'Knot',
   price: 79,
   description: 'A denim tote bag with an adjustable handle',
-  detailsSipping: ['100% cotton', 'a wide armhole']
+  detailsShipping: ['100% cotton', 'a wide armhole']
 };
