@@ -6,58 +6,136 @@ import defaultDetailsShipping from '../../products/details-shipping.json';
 import PriceSuperscripted from '../PriceSuperscripted';
 import Layout from '../Layout';
 import Helmet from 'react-helmet';
+import SizesList from '../sizes/SizesList';
+import ColorsList from '../colors/ColorsList';
 import './Template.sass';
 
-export default function Product({ data }) {
-  const product = data.allJavascriptFrontmatter.nodes[0];
-  const detailsShipping = [
-    ...product.frontmatter.detailsShipping,
-    ...defaultDetailsShipping
-  ].filter((item, index, a) => a.indexOf(item) === index);
-  console.log(product);
-  return (
-    <Layout>
-      <Helmet>
-        <title>{product.frontmatter.name}</title>
-      </Helmet>
-      <main className="single-product">
-        <section className="product__photo">
-          <Img
-            fluid={{
-              ...product.frontmatter.image.childImageSharp.fluid,
-              aspectRatio: 3 / 4
-            }}
-          />
-          <h2 className="product__price">
-            <PriceSuperscripted
-              currency="$"
-              value={product.frontmatter.price}
+export default class Product extends React.Component {
+  constructor(props) {
+    super(props);
+    const product = props.data.allJavascriptFrontmatter.nodes[0];
+    this.state = {
+      product,
+      currentSize: Product.findSize(
+        product.frontmatter.size,
+        product.frontmatter.sizes
+      ),
+      currentColor: Product.findColor(
+        product.frontmatter.color,
+        product.frontmatter.colors
+      )
+    };
+    this.handleSelectSize = this.handleSelectSize.bind(this);
+    this.handleSelectColor = this.handleSelectColor.bind(this);
+  }
+
+  static findSize(value, sizes) {
+    if (value && sizes && sizes.length > 0) {
+      return sizes.find((size) => size.value === value);
+    }
+  }
+
+  static findColor(name, colors) {
+    if (name && colors && colors.length > 0) {
+      return colors.find((color) => color.name === name);
+    }
+  }
+
+  handleSelectSize({ value }) {
+    const currentSize = Product.findSize(
+      value,
+      this.state.product.frontmatter.sizes
+    );
+    if (currentSize != null) {
+      const product = { ...this.state.product };
+      product.frontmatter.size = currentSize.value;
+      if (Number.isFinite(currentSize.price)) {
+        product.frontmatter.price = currentSize.price;
+      }
+      if (currentSize.image != null) {
+        product.frontmatter.image = currentSize.image;
+      }
+      this.setState({ product, currentSize });
+    }
+  }
+
+  handleSelectColor({ name }) {
+    const currentColor = Product.findColor(
+      name,
+      this.state.product.frontmatter.colors
+    );
+    if (currentColor != null) {
+      const product = { ...this.state.product };
+      product.frontmatter.color = currentColor.name;
+      if (Number.isFinite(currentColor.price)) {
+        product.frontmatter.price = currentColor.price;
+      }
+      if (currentColor.image != null) {
+        product.frontmatter.image = currentColor.image;
+      }
+      this.setState({ product, currentColor });
+    }
+  }
+
+  render() {
+    const { frontmatter, fields } = this.state.product;
+    const detailsShipping = [
+      ...frontmatter.detailsShipping,
+      ...defaultDetailsShipping
+    ].filter((item, index, a) => a.indexOf(item) === index);
+    return (
+      <Layout>
+        <Helmet>
+          <title>{frontmatter.name}</title>
+        </Helmet>
+        <main className="single-product">
+          <section className="product__photo">
+            <Img
+              fluid={{
+                ...frontmatter.image.childImageSharp.fluid,
+                aspectRatio: 3 / 4
+              }}
             />
-          </h2>
-        </section>
-        <section className="product__description">
-          <h1 className="product__name">{product.frontmatter.name}</h1>
-          <h3 className="description__text">
-            {product.frontmatter.description}
-          </h3>
-          <section>Colors</section>
-          <section>Sizes</section>
-          <button className="product__button">Add to cart</button>
-          {detailsShipping.length > 0 && (
-            <div className="product__details">
-              <div className="details__title">Details &amp; shipping:</div>
-              <ul>
-                {detailsShipping.map((item, index) => (
-                  <li key={`ds-${index}`}>{item}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </section>
-        {product.fields.galleryImages &&
-          product.fields.galleryImages.length > 0 && (
+            <h2 className="product__price">
+              <PriceSuperscripted currency="$" value={frontmatter.price} />
+            </h2>
+          </section>
+          <section className="product__description">
+            <h1 className="product__name">{frontmatter.name}</h1>
+            <h3 className="description__text">{frontmatter.description}</h3>
+            {frontmatter.sizes && frontmatter.sizes.length && (
+              <div className="product__sizes">
+                <SizesList
+                  sizes={frontmatter.sizes}
+                  currentSize={this.state.currentSize}
+                  onSelect={this.handleSelectSize}
+                />
+              </div>
+            )}
+            {frontmatter.colors && frontmatter.colors.length && (
+              <div className="product__colors">
+                <ColorsList
+                  colors={frontmatter.colors}
+                  currentColor={this.state.currentColor}
+                  onSelect={this.handleSelectColor}
+                />
+              </div>
+            )}
+            <button className="product__button">Add to cart</button>
+            {detailsShipping.length > 0 && (
+              <div className="product__details">
+                <div className="details__title">Details &amp; shipping:</div>
+                <ul>
+                  {detailsShipping.map((item, index) => (
+                    <li key={`ds-${index}`}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+          {fields.galleryImages && fields.galleryImages.length > 0 && (
             <section className="product__gallery">
-              {product.fields.galleryImages.map((image) => (
+              {fields.galleryImages.map((image) => (
                 <Img
                   key={image.id}
                   fluid={{ ...image.childImageSharp.fluid, aspectRatio: 1 }}
@@ -65,9 +143,10 @@ export default function Product({ data }) {
               ))}
             </section>
           )}
-      </main>
-    </Layout>
-  );
+        </main>
+      </Layout>
+    );
+  }
 }
 
 Product.propTypes = {
@@ -104,8 +183,8 @@ export const query = graphql`
           sizes {
             image {
               childImageSharp {
-                fluid {
-                  src
+                fluid(maxWidth: 640) {
+                  ...GatsbyImageSharpFluid_withWebp_noBase64
                 }
               }
             }
@@ -124,67 +203,3 @@ export const query = graphql`
     }
   }
 `;
-
-// export const query = graphql`
-//   query($slug: String, $image: String, $gallery: String) {
-//     image: allFile(
-//       filter: {
-//         sourceInstanceName: { eq: "products" }
-//         internal: { mediaType: { glob: "image/*" } }
-//         relativeDirectory: { eq: $image }
-//       }
-//       sort: { fields: modifiedTime, order: DESC }
-//       limit: 1
-//     ) {
-//       nodes {
-//         childImageSharp {
-//           fluid {
-//             src
-//           }
-//         }
-//       }
-//     }
-//     gallery: allFile(
-//       filter: {
-//         sourceInstanceName: { eq: "products" }
-//         internal: { mediaType: { glob: "image/*" } }
-//         relativeDirectory: { eq: $gallery }
-//       }
-//       sort: { fields: modifiedTime, order: DESC }
-//     ) {
-//       nodes {
-//         childImageSharp {
-//           fluid {
-//             src
-//           }
-//         }
-//       }
-//     }
-//     product: javascriptFrontmatter(node: { relativeDirectory: { eq: $slug } }) {
-//       frontmatter {
-//         color
-//         colors {
-//           name
-//           value
-//         }
-//         description
-//         detailsShipping
-//         error
-//         name
-//         price
-//         size
-//         sizes {
-//           price
-//           value
-//           image {
-//             childImageSharp {
-//               fluid {
-//                 src
-//               }
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `;
