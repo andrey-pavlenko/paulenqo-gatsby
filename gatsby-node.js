@@ -120,6 +120,23 @@ function addGalleryRelativeDirectory(node, createNodeField) {
   }
 }
 
+function addProductSlug(node, createNodeField) {
+  if (
+    node.internal &&
+    node.internal.type === 'JavascriptFrontmatter' &&
+    node.node &&
+    node.node.sourceInstanceName === 'products'
+  ) {
+    console.info(node.node.relativePath, node.node.relativeDirectory);
+    createNodeField({
+      node,
+      name: 'slug',
+      value: node.node.relativeDirectory
+    });
+  }
+}
+
 exports.onCreateNode = ({ node, actions }) => {
+  addProductSlug(node, actions.createNodeField);
   addGalleryRelativeDirectory(node, actions.createNodeField);
 };
