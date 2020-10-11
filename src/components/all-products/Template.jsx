@@ -4,8 +4,8 @@ import { graphql } from 'gatsby';
 import Layout from '../Layout';
 import Img from 'gatsby-image';
 import PriceSuperscripted from '../PriceSuperscripted';
-import AvaibleColors from '../AvaibleColors';
-import AvaibleSizes from '../AvaibleSizes';
+import ColorsList from '../colors/ColorsList';
+import SizesList from '../sizes/SizesList';
 import './Template.sass';
 
 function Product({ frontmatter }) {
@@ -32,13 +32,13 @@ function Product({ frontmatter }) {
         {frontmatter.colors != null && (
           <div className="product__colors">
             <label>Avaible colors</label>
-            <AvaibleColors colors={frontmatter.colors} />
+            <ColorsList colors={frontmatter.colors} />
           </div>
         )}
         {frontmatter.sizes != null && (
           <div className="product__sizes">
             <label>Avaible sizes</label>
-            <AvaibleSizes sizes={frontmatter.sizes} />
+            <SizesList sizes={frontmatter.sizes} />
           </div>
         )}
         <div className="product__button">

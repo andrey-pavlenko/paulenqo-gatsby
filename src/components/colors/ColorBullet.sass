@@ -1,0 +1,16 @@
+@import ../../styles/_variables
+@import ../../styles/_product-styles
+
+.color-bullet
+  @extend %g-bullet
+  
+  &--is-active
+    border-color: rgba(0,0 ,0 ,.5)
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.375)
+    background-color: rgba(0, 0, 0, 0.5)
+
+  &--can-click
+    cursor: pointer
+
+  &__blot
+    @extend %g-bullet-blot

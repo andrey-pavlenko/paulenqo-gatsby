@@ -1,0 +1,16 @@
+@import ../../styles/_variables
+@import ../../styles/_product-styles
+
+.size-bullet
+  @extend %g-bullet
+  display: inline-block
+  padding: .25em .75em
+  
+  &--is-active
+    border-color: rgba(0,0 ,0 ,.5)
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.375)
+    background-color: rgba(0, 0, 0, 0.5)
+    color: $g-color-white
+
+  &--can-click
+    cursor: pointer
