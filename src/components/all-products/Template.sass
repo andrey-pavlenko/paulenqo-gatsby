@@ -1,17 +1,18 @@
-@import '../styles/_variables'
+@import ../../styles/_variables
+@import ../../styles/_product-styles
 
 .products__container
   $product-card-width: 608px
-  $product-gutter: 16px
+  $product-gutter: $g-grid-gutter
 
   display: grid
   grid-template-rows: repeat(auto-fit, 1fr)
-  @media screen and ( min-width: $g-card-width + ($g-grid-gutter * 2) )
+  @media screen and ( min-width: $product-card-width + ($product-gutter * 2) )
     grid-gap: $product-gutter
-    grid-template-columns: repeat(auto-fill, minmax($g-card-width, 1fr))
+    grid-template-columns: repeat(auto-fill, minmax($product-card-width, 1fr))
 
   .products__single-product
-    @media screen and ( min-width: $g-card-width + ($g-grid-gutter * 2) )
+    @media screen and ( min-width: $product-card-width + ($product-gutter * 2) )
       display: grid
       grid-template-columns: 1fr 1fr
 
@@ -19,13 +20,12 @@
     position: relative
 
   .product__price
+    @extend %g-product-price-shadowed
+    @extend %g-product-price-size
     position: absolute
-    font-size: 2.5em
-    color: white
-    text-shadow:  0 0 2px rgba(0, 0, 0, 0.5), 4px 4px 2px rgba(0, 0, 0, 0.125)
     right: $product-gutter
     bottom: $product-gutter
-    @media screen and ( min-width: $g-card-width + ($g-grid-gutter * 2) )
+    @media screen and ( min-width: $product-card-width + ($product-gutter * 2) )
       top: $product-gutter
       bottom: unset
 
@@ -38,7 +38,7 @@
     border: 1px solid rgba(0,0 ,0 ,.25 )
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.125)
 
-    @media screen and ( min-width: $g-card-width + ($g-grid-gutter * 2) )
+    @media screen and ( min-width: $product-card-width + ($product-gutter * 2) )
       top: unset
       margin: 0
       border: none
@@ -47,21 +47,19 @@
   .product__button
     margin-top: $product-gutter
     text-align: right
-    @media screen and ( min-width: $g-card-width + ($g-grid-gutter * 2) )
+    @media screen and ( min-width: $product-card-width + ($product-gutter * 2) )
       position: absolute
       left: $product-gutter
       bottom: 0
 
     a
+      @extend %g-product-button
       display: inline-block
       padding: ($product-gutter / 2) $product-gutter
-      background-color: #333
-      color: white
-      text-decoration: none
-      border-radius: 4px
+      font-size: 1em
   
   .product__name
-    font-size: 2em
+    @extend %g-product-name-size
 
   .product__text
     font-weight: normal

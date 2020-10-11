@@ -9,7 +9,6 @@ exports.onCreateWebpackConfig = ({ stage, actions }) => {
 };
 
 async function createProductPages(graphql, createPage) {
-  const GALLERY_PATH_SUFFIX = '/gallery';
   const { data } = await graphql(`
     {
       allJavascriptFrontmatter(
@@ -29,9 +28,9 @@ async function createProductPages(graphql, createPage) {
   );
   createPage({
     path: '/products',
-    component: require.resolve('./src/components/ProductsTemplate.jsx'),
+    component: require.resolve('./src/components/all-products/Template.jsx'),
     context: {
-      dirs: slugs
+      slugs
     }
   });
 
@@ -42,9 +41,7 @@ async function createProductPages(graphql, createPage) {
         './src/components/single-product/Template.jsx'
       ),
       context: {
-        slug,
-        image: slug,
-        gallery: slug + GALLERY_PATH_SUFFIX
+        slug
       }
     })
   );

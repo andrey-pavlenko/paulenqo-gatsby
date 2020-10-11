@@ -4,6 +4,8 @@ import { graphql } from 'gatsby';
 import Img from 'gatsby-image';
 import defaultDetailsShipping from '../../products/details-shipping.json';
 import PriceSuperscripted from '../PriceSuperscripted';
+import Layout from '../Layout';
+import Helmet from 'react-helmet';
 import './Template.sass';
 
 export default function Product({ data }) {
@@ -14,46 +16,57 @@ export default function Product({ data }) {
   ].filter((item, index, a) => a.indexOf(item) === index);
   console.log(product);
   return (
-    <main className="single-product">
-      <section className="product__photo">
-        <Img
-          fluid={{
-            ...product.frontmatter.image.childImageSharp.fluid,
-            aspectRatio: 3 / 4
-          }}
-        />
-        <h2 className="product__price">
-          <PriceSuperscripted currency="$" value={product.frontmatter.price} />
-        </h2>
-      </section>
-      <section className="product__description">
-        <h1 className="product__name">{product.frontmatter.name}</h1>
-        <h3 className="description__text">{product.frontmatter.description}</h3>
-        <section>Colors</section>
-        <section>Sizes</section>
-        <button className="product__button">Add to cart</button>
-        {detailsShipping.length > 0 && (
-          <div className="product__details">
-            <div className="details__title">Details &amp; shipping:</div>
-            <ul>
-              {detailsShipping.map((item, index) => (
-                <li key={`ds-${index}`}>{item}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </section>
-      {product.fields.galleryImages && product.fields.galleryImages.length > 0 && (
-        <section className="product__gallery">
-          {product.fields.galleryImages.map((image) => (
-            <Img
-              key={image.id}
-              fluid={{ ...image.childImageSharp.fluid, aspectRatio: 1 }}
+    <Layout>
+      <Helmet>
+        <title>{product.frontmatter.name}</title>
+      </Helmet>
+      <main className="single-product">
+        <section className="product__photo">
+          <Img
+            fluid={{
+              ...product.frontmatter.image.childImageSharp.fluid,
+              aspectRatio: 3 / 4
+            }}
+          />
+          <h2 className="product__price">
+            <PriceSuperscripted
+              currency="$"
+              value={product.frontmatter.price}
             />
-          ))}
+          </h2>
         </section>
-      )}
-    </main>
+        <section className="product__description">
+          <h1 className="product__name">{product.frontmatter.name}</h1>
+          <h3 className="description__text">
+            {product.frontmatter.description}
+          </h3>
+          <section>Colors</section>
+          <section>Sizes</section>
+          <button className="product__button">Add to cart</button>
+          {detailsShipping.length > 0 && (
+            <div className="product__details">
+              <div className="details__title">Details &amp; shipping:</div>
+              <ul>
+                {detailsShipping.map((item, index) => (
+                  <li key={`ds-${index}`}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </section>
+        {product.fields.galleryImages &&
+          product.fields.galleryImages.length > 0 && (
+            <section className="product__gallery">
+              {product.fields.galleryImages.map((image) => (
+                <Img
+                  key={image.id}
+                  fluid={{ ...image.childImageSharp.fluid, aspectRatio: 1 }}
+                />
+              ))}
+            </section>
+          )}
+      </main>
+    </Layout>
   );
 }
 

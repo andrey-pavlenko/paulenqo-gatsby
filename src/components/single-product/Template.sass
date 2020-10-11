@@ -2,31 +2,50 @@
 @import ../../styles/_product-styles
 
 .single-product
+  $mobile-width: 640px
+  $product-card-max-width: 1024px
+  $product-gutter: $g-grid-gutter
+
+  max-width: $product-card-max-width + $product-gutter * 2
+  margin: 0 auto
+
+  @media screen and ( min-width: $mobile-width )
+    display: grid
+    grid-gap: $product-gutter
+    grid-template-columns: 1fr 1fr
 
   .product__photo
     position: relative
 
   .product__price
-    @extend .g-product-price-shadowed
-    @extend .g-product-price-size
+    @extend %g-product-price-shadowed
+    @extend %g-product-price-size
     position: absolute
-    bottom: $g-grid-gutter
-    right: $g-grid-gutter
+    bottom: $product-gutter
+    right: $product-gutter
+    @media screen and ( min-width: $mobile-width )
+      bottom: unset
+      top: $product-gutter 
   
   .product__description
-    padding: $g-grid-gutter
+    padding: $product-gutter
+    @media screen and ( min-width: $mobile-width )
+      padding: $product-gutter 0 0 0
 
   .product__name
-    @extend .g-product-name-size
+    @extend %g-product-name-size
 
   .description__text
     font-weight: normal
     font-size: 1rem
 
   .product__button
-    @extend .g-product-button
-    margin: $g-grid-gutter 0
+    @extend %g-product-button
+    margin: $product-gutter 0
     width: 100%
+
+    @media screen and ( min-width: $mobile-width )
+      width: auto
 
   .product__details
     color: $g-color-dark
@@ -40,4 +59,11 @@
 
     & > div
       flex: 0 0 50%
+      @media screen and ( min-width: $product-card-max-width )
+        flex: 0 0 33.33%
+
+
+    @media screen and ( min-width: $mobile-width )
+      grid-column: auto / span 2 
+
         
